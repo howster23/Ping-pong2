@@ -47,9 +47,21 @@ class Lol(GameSprite):
 
 meg = Player(("meg.png"),5,win_height - 100,80,100,10)
 leon = Lol(("leon.png"),600,win_height - 100,80,100,10)
-ball = Player(("ball.jpg"),400,win_height - 90,60,90,7)
+ball = GameSprite(("ball.jpg"),400,win_height - 90,60,90,7)
+
+
+speed_x = 3
+speed_y = 3
+font.init()
+font1 = font.Font(None,35)
+lose1 = font1.render('MAEG 1 LOSE!',True,(180,0,0))
+
+font1 = font.Font(None,35)
+lose1 = font1.render('leon 1 LOSE!',True,(180,0,0))
+    
 
 while game:
+    window.blit(background,(0,0))
     # событие нажатия на кнопку Закрыть
     for e in event.get():
         if e.type == QUIT:
@@ -57,8 +69,25 @@ while game:
         
 
     if finish != True:
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+
+        if ball.rect.y > 420 or ball.rect.y < 0:
+                speed_y *= -1
+        if sprite.collide_rect(meg,ball) or sprite.collide_rect(leon,ball):
+            speed_x *= -1
+
+        if ball.rect.x < 0:
+            finish = True 
+            window.blit(lose1,(200,200))
+
+        if ball.rect.x > 700:
+            finish = True 
+            window.blit(lose1,(200,200))
+    
+        
         # обновляем фон
-        window.blit(background,(0,0))
+        
         meg.reset()
         meg.update()
         leon.reset()
